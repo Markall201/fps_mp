@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://bh5e7ykf5j4oa"]
+
+[ext_resource type="PackedScene" uid="uid://b4f0nhdbhuobt" path="res://Assets/Environment/fps_arena.glb" id="1_ssdt6"]
+[ext_resource type="Material" uid="uid://v6jmakvuodce" path="res://Assets/Materials/fps_arena_material_ground.tres" id="2_wfjg4"]
+[ext_resource type="Material" uid="uid://bw7g1tpfv8vjk" path="res://Scenes/fps_arena_material_obstacle.tres" id="3_p1cfr"]
+
+[node name="fps_arena" instance=ExtResource("1_ssdt6")]
+
+[node name="Plane" parent="." index="0"]
+surface_material_override/0 = ExtResource("2_wfjg4")
+surface_material_override/1 = ExtResource("3_p1cfr")

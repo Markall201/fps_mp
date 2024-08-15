@@ -1,0 +1,114 @@
+[gd_scene load_steps=8 format=3 uid="uid://bf5fcbwkgvwtt"]
+
+[ext_resource type="PackedScene" uid="uid://bh5e7ykf5j4oa" path="res://Scenes/fps_arena.tscn" id="1_lrkic"]
+[ext_resource type="Script" path="res://Scenes/world.gd" id="1_tw0cu"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_414wl"]
+sky_top_color = Color(0, 0.466676, 0.756518, 1)
+sky_horizon_color = Color(0.527732, 0.682946, 0.749484, 1)
+ground_bottom_color = Color(0.0776423, 0.213789, 0, 1)
+ground_horizon_color = Color(0.0260023, 0.153653, 0, 1)
+
+[sub_resource type="Sky" id="Sky_nhmf1"]
+sky_material = SubResource("ProceduralSkyMaterial_414wl")
+
+[sub_resource type="Environment" id="Environment_2svch"]
+background_mode = 2
+sky = SubResource("Sky_nhmf1")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_abu13"]
+bg_color = Color(0.643284, 0, 0.0839686, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mvjw3"]
+bg_color = Color(6.44952e-06, 0.825703, 0.184062, 1)
+
+[node name="World" type="Node"]
+script = ExtResource("1_tw0cu")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_2svch")
+
+[node name="fps_arena" parent="." instance=ExtResource("1_lrkic")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="MainMenu" type="PanelContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 372.0
+offset_top = 229.0
+offset_right = -372.0
+offset_bottom = -228.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainMenu"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Main Menu"
+horizontal_alignment = 1
+
+[node name="HostButton" type="Button" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Host"
+
+[node name="JoinButton" type="Button" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Join"
+
+[node name="AddressEntry" type="LineEdit" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Enter address to join here"
+alignment = 1
+
+[node name="HUD" type="Control" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="HealthBar" type="ProgressBar" parent="CanvasLayer/HUD"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 297.0
+offset_top = 39.0
+offset_right = -297.0
+offset_bottom = -571.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_abu13")
+theme_override_styles/fill = SubResource("StyleBoxFlat_mvjw3")
+max_value = 3.0
+value = 3.0
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://Scenes/player.tscn")
+spawn_path = NodePath("..")
+
+[connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]
